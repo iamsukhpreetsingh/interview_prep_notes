@@ -1,0 +1,15 @@
+There are 2 type of Architecture:
+
+1. Shared Disk
+- All compute nodes share the same storage (common disk), but each node has its own CPU and memory.
+- Compute Nodes read/write to the same disk, but coordinate to avoid conflicts.
+
+2. Shared Nothing 
+- Each node has its own CPU, memory, and storage, and nothing is shared.
+- Compute Nodes communicate over the network and distribute data across machines.
+- Better and independent scalability, preformance 
+
+3. Snowflake Architecture:
+- Data Storage Layer: Just like Shared disk, snowflake have a central data repository. Data is stored in compressed columnar storage format maintained by snowflake itself. Also, data is automatically organised into micro-partitions (encrypted using AES256, 50-500MB in size) which make query processing more easier and faster. Data is not visible direct via cloud but only through snowflake.
+- Virtual Warehouse Layer (compute layer): On the other hand it use MPP masive parallel processing to process the query. sizes are - X-Small - 6XL. Each WH i.e is independent of each other i.e. it can scale independently without impacting other compute/warehouses.
+- Cloud Service layer: It is the brain, and control things like Authentication and access control, optimization, metadata management (tbl count, partition count, min max, etc), security, RBAC, data sharing, query optimization
