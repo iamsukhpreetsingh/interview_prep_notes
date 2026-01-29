@@ -39,3 +39,13 @@ Common Query Problems Identification using Query Profiler:
 3. Query too large to fit in memory: Disk Spilling problem. How to mitigate?
     - use larger warehouse
     - Procesd data in small batches
+4. Ineffective pruning: If query has filter, but stats of pruning shows no data reduction that indicates that different data organisation   might be benificial for the query.
+
+
+Query History:
+UI:
+- Only last 14 days of query history is shown in UI.
+- User can view the query but not the results of that query.
+
+QUERY HISTORY VIEW:
+- We can use ACCOUNT_USAGE view to view query history upto 1year (365 days) by various dimensions like time, user, WH, etc.
