@@ -1,0 +1,7 @@
+What is zero copy clone?
+
+- Feature where user can copy DB, Schemas, tables without any additional costs as only the metadata of base table is copied in clould service layer.
+- it doesnt clone internal stages and external tables.
+- the cloned table will have its parent table 'clone_group_id' in information_schema.table_storage_metrics.
+- if a user make any DML operations on clined table, then snowflake will charge. Why? - because without change SF will refer the same micropartition but if changes occur the new micropartition will be made, so thats chargable.
+- Each of the object i.e. the parent and the cloned, is independent of each other. Any changes made on either of it will not be synced to either.
