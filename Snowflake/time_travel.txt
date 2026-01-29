@@ -1,1 +1,28 @@
 What is timetravel?
+
+- Retrieving data-related objects like DB, tables, schemas that are changed/deleted.
+- Snowflake store data in micropartitions and micropartitons are immutabe. If you want/have to update the data, snowflake will create a new micropartition instead of updating to old one. 
+- the old micropartitons with old data will be kept with snowflake for some duration, which is configured by MAX RETENTION TIME (1-90days) get expired. Once this get expired (MRT) it will go to fail safe zone (upto 7 days for permanent tables)
+- each table in schema follows the retention time of its parent object. if schema have 1 then table will have 1 as default retention time and if 10 then 10. similarly each schema in database follow retention time of its parent DB, UNTIL you explicitely change it for particular object.
+
+Command:
+	ALTER TABLE tbl
+	SET DATA_RETENTION_TIE_IN_DAYS=10;
+	
+	ALTER SCHEMA QUESTIONS
+	SET DATA_RETENTION_TIME_IN_DAYS = 2;
+		
+	
+To undrop object:
+	UNDROP Schema schema_name
+	
+
+- We have 3 ways to query historical data;
+1.  At specific time/day
+  	SELECT * FROM tbl at(timestamp => ''::timestamp_tz)
+  
+2.   At specific minutes before
+  	SELECT * FROM tbl at(offset => -60)
+    
+3.  By query id
+  	SELECT * FROM tbl before(statement => 'query_id')
