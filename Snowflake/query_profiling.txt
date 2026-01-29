@@ -1,0 +1,41 @@
+What is query profiling?
+
+- It provides execution details of the query 
+- It provides the graphical representation of main componenets of processing plan of a query.
+- Used to know about preformance and behaviour of a query.
+- It is basically sequence of steps in the query and how any system dismentals the query and process the query into step like 
+  Filter -> join -> aggregate , also known as explained plan.
+
+Query Plan, and order of execution:
+  1. Table scan
+  2. Filter
+  3. Aggregate
+  4. Sorting
+  5. Final result
+
+example:
+
+  SELECT 
+  COUNT(*) -- Step-3 Aggregation
+  FROM Table -- Step-1 Table scan
+  WHERE
+  DATE = 1997 -- Step-2 filter
+  GROUP BY COL_1
+  ORDER BY COL_2 -- step-4 Sorting
+
+- It also tells us on each step how much percentage of execution time has consumed on each step and how much data and partitions is scanned on each step. Also we can check most expenive nodes that is consuming most of the processing so we can optimize that. 
+
+
+What is micropartition Pruning?
+- At run time, only scanning of partitions of data that is required at that time (like example, a query specifies a filter with 10% of rows values should scan only 10% of the data micro-partitions)
+
+What is spilling?
+- It is all about memory management in snowflake. It degrades the preformance as If query requires even more memory while execution then present in local storage, it spills the bytes of data onto remote cloud storage. Bassically OOM (out of memory error).
+
+
+Common Query Problems Identification using Query Profiler:
+1. Exploding Joins: In simple terms cross/cartesian/product join, where one table match multiple records in another table. eg, after joining tables the resutant number of records are way significantly higher.
+2. UNION without ALL.
+3. Query too large to fit in memory: Disk Spilling problem. How to mitigate?
+    - use larger warehouse
+    - Procesd data in small batches
