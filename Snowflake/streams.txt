@@ -1,0 +1,17 @@
+What is Streams?
+
+- it is is mechenism to track DML changes/CDC on a particular table/view.
+
+How it works?
+- A stream captures initial snapshot of table/view at the time of creation, called offset.
+- once snapshot is created stream begin to record the DML changes 
+- changes contain info like, 
+	- state of row before and after change
+	- metadata about operation (INSERT, UPDATE, DELETE) - METADATA$ACTION, METADATA$ISUPDATE, METADATA$ROW_ID
+- Note that a stream itself does not contain any table data. A stream only stores an offset for the source object and returns CDC records by leveraging the versioning history for the source object.
+- Any changes made on the table and recorded by the stream are satle for 14 days if not consumed before. means the change data capture will be there for 14 days in stream and after that it will get deleted.
+- If we have to incerase this stale/retention time, we have to alter the base table and SET the MAX_DATA_RETENTION_TIME_IN_DAYS = 'num_of_days'
+- different modes of stream:
+	CREATE OR REPLACE STREAM stream_name ON TABLE base_table
+	APPEND_ONLY = TRUE -- It will capture only records that are inserted. NO updates/deletes will be captured.
+	INSERT_ONLY = TRUE -- it is same as append only but for external and iceberg tables

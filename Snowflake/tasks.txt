@@ -1,0 +1,23 @@
+What are tasks?
+
+- Tasks are the objects that is used to run the specific script/sql statements on specific interval of time.
+
+COMMAND:
+to create task:
+	CREATE TASK task_name
+	WAREHOUSE = "WH_NAME" -- user managed WH
+	SCHEDULE = "2 MIN"
+	AS
+	SELECT * FROM tbl;
+	
+	
+to run task manually:
+	EXECUTE TASK_NAME;
+
+- there are some parameters like :
+	- auto suspend paramenter - which is used to suspend the after any consecutive number of failures
+	- timeout - max time to which task can run after that it stops automatically
+	
+- There are 2 types of tasks that we can make:
+	- user managed - normal as above (we can go upto 6XL WH)
+	- serverless - but snowflake will tae control to assign the required compute. (this islimited to 2XL WH size only)
