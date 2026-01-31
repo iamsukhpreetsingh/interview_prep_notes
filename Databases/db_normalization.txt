@@ -1,4 +1,5 @@
 Normalization in database?
+
 - It is the process of reducing redundancy, avoid anomalies, and ensure data integrity in databases by designing the database in such a way that no or very minimal bad data can enter in our database
 1. Redundancy (Duplicate Data) - if a student address is stored in 3 different places/tables in database which lead to wastage of storage, cause inconsistencies and make the updation of data difficult.
 2. Anomalies (Problems in Insert, Update, Delete) - Anomalies are unexpected errors/problems that occur when a database is not properly structured.
@@ -18,7 +19,7 @@ Normal Forms:
 	  #2323/3B1, Mohali, Punjab, India - Not 1NF
 	  This is address column. But we can divide it into 3 atomic columns i.e. Apparment, State, and Country. This is 1NF.
 	- Each row contain values of same type.
-	- Each row is unique (ensured by a PK).
+	- Each row is unique (ensured by a PK). 
 	- No repeating group of columns.
 2. 2NF (2nd Normal Form)
 	- It must be in 1NF.
@@ -71,3 +72,56 @@ Normal Forms:
 	    FOREIGN KEY (order_id) REFERENCES orders_2nf(order_id),
 	    FOREIGN KEY (book_isbn) REFERENCES books_2nf(isbn)
 	);
+	
+3. 3NF (3rd Normal Form):
+	- It must be in 2NF
+	- It must not have transitive dependencies. i.e. a non key attribute depend on another non-key attribute, rather than depending on PK.
+	
+	Example:
+	CREATE TABLE orders_2nf (
+	    order_id INT PRIMARY KEY,
+	    customer_name VARCHAR(100),
+	    customer_email VARCHAR(100),
+	    customer_address VARCHAR(255),
+	    order_date DATE
+	);
+	
+	like customer_email, customer_address depends on customer_name not on PK order_id. So one non key attribute is depending on another non key attribute. So, what we will do is seprate customers and orders data into seperate tables.
+	
+	CREATE TABLE customers_3nf (
+	    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+	    name VARCHAR(100),
+	    email VARCHAR(100),
+	    address VARCHAR(255)
+	);
+
+	CREATE TABLE orders_3nf (
+	    order_id INT PRIMARY KEY,
+	    customer_id INT,
+	    order_date DATE,
+	    FOREIGN KEY (customer_id) REFERENCES customers_3nf(customer_id)
+	);
+
+	CREATE TABLE books_3nf (
+	    isbn VARCHAR(20) PRIMARY KEY,
+	    title VARCHAR(200),
+	    author VARCHAR(100),
+	    price DECIMAL(10, 2)
+	);
+
+	CREATE TABLE order_items_3nf (
+	    order_id INT,
+	    book_isbn VARCHAR(20),
+	    quantity INT,
+	    PRIMARY KEY (order_id, book_isbn),
+	    FOREIGN KEY (order_id) REFERENCES orders_3nf(order_id),
+	    FOREIGN KEY (book_isbn) REFERENCES books_3nf(isbn)
+	);
+	
+	
+	
+Disadvantages of Normalization
+1. More Tables → More Joins → Slower Queries
+2. Harder for Reporting & Analytics
+3. More Foreign Keys → Slower Insert/Update
+4. Complex Queries
