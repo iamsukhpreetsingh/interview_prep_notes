@@ -1,0 +1,21 @@
+What is indexing in databases?
+
+- Indexing creates a separate sorted structure (usually a B-Tree) that stores the indexed column and pointers to actual rows. Because the values are sorted, the database performs very fast lookups instead of scanning the whole table, similar to jumping directly to a page using a book’s index.
+
+Without an index → you must read every page (full table scan).
+With an index → you go directly to the page number (fast lookup).
+
+
+How to Decide Which Columns Should Be Indexed?
+
+- Indexes should be created only on columns that help speed up searching, filtering, or joining.
+1. Columns Used Frequently in WHERE Conditions
+2. Columns Used in JOIN Conditions
+3. Columns Used in ORDER BY / GROUP BY
+4. Columns with High Selectivity
+	- Selectivity = how many unique values a column has.
+	- High selectivity → good for indexing
+	- Low selectivity → bad index (database won’t use it)
+	
+So basically, We index columns that are mostly used in WHERE, JOIN, ORDER BY, and GROUP BY.
+We choose columns with high uniqueness (high selectivity) and avoid indexing columns with frequent updates or very low distinct values.
